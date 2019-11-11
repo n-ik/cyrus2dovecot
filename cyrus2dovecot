@@ -270,10 +270,10 @@ sub main () {
 		# Do the actual conversion.
 		c_read_mailbox($meta, $user, $cyrus_inbox, $cyrus_seen,
 		    $cyrus_sub, $cyrus_quota,$cyrus_sieve, $sieve_only);
-		
+
 		debug('Cyrus Inbox:',$cyrus_inbox);
 		debug('Dovecot Inbox:',$dovecot_inbox);
-		
+
 		d_write_mailbox($meta, $cyrus_inbox, $dovecot_inbox, $sieve_only);
 
 		# Give some feedback.
@@ -414,7 +414,7 @@ sub slurp ($) {
 # Resolve "%u", "%h", "x", and "%<n>u" within pathnames.  Modify the specified
 # arguments directly (as opposed to returning the new pathnames).
 #
-# AP: Added %U (Username only) %d (domainname) %g (first letter of domain) 
+# AP: Added %U (Username only) %d (domainname) %g (first letter of domain)
 # AS: Added %P (Username only, all ^replaced by . )
 #
 sub fixpath ($@) {
@@ -446,7 +446,7 @@ sub fixpath ($@) {
 		# This is how Cyrus "hashes" non-[a-z]-characters.
 		$hash = ($hash =~ /^[A-Z]$/) ? lc($hash) : 'q';
 	}
-    
+
 
 	for (@_) {
 		s/%u/$user/g;
@@ -739,10 +739,10 @@ sub c_read_mailbox ($$$$$$$$) {
 sub _c_read_folders ($$$$) {
 	my ($meta, $rootdir, $boxpath, $seendata) = @_;
 
-	debug ('Meta: ',$meta); 
-	debug ('Rootdir: ',$rootdir); 
-	debug ('Boxpath: ',$boxpath); 
-	debug ('Seendata: ',$seendata); 
+	debug ('Meta: ',$meta);
+	debug ('Rootdir: ',$rootdir);
+	debug ('Boxpath: ',$boxpath);
+	debug ('Seendata: ',$seendata);
 
 	my $box = ($boxpath eq $rootdir) ? 'INBOX' : $boxpath;
 	my ($mailfolder, $index, $expunge, $seen);
@@ -1427,8 +1427,8 @@ sub _d_write_subscriptions ($$) {
 #
 sub _d_write_sieve ($$) {
 	my ($sieve, $rootdir) = @_;
-	my $file = "$rootdir/sieve/phpscript.sieve";
-	
+	my $file = "$rootdir/sieve/managesieve.sieve";
+
 	#make sure sieve dirs exists
 	unless(-d "$rootdir/sieve"){
 		debug("Creating sieve folder $rootdir/sieve");
@@ -1445,7 +1445,6 @@ sub _d_write_sieve ($$) {
 		debug('Sieve written:', $sieve);
 	close($handle) or error("Cannot close $file: $!");
 	debug('Done writing:', $file);
-	symlink("sieve/phpscript.sieve","$rootdir/.dovecot.sieve") or error("Cannot create sieve simlink $file: $!");
 }
 
 #
@@ -1542,7 +1541,7 @@ of C<%h> will be replaced by Cyrus' directory "hash" character for that
 I<user> name (i.e., C<%h> is equivalent to C<%1u> if the first character
 of the I<user> name is a lowercase letter), and any occurrence of C<%x>
 will be replaced by Cyrus' "fulldirhash" character for that I<user> name.
-When you have virtual domains in your cyrus installation then these 
+When you have virtual domains in your cyrus installation then these
 additional substitutes can be made:
 %d will be replaced by the domain part of the username
 %U is the user part of the username
